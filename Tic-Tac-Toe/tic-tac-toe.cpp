@@ -42,24 +42,62 @@ bool checkForWin(char b[9]) {
 	}
 }
 
+bool checkFull(char b[9]) {
+	for (int i = 0; i < 9; i++) {
+		if (b[i] == ' ') {
+			return false;
+		}
+	}
+	return true;
+}
+
+bool validMove(char b[9], int i) {
+	if (0 <= i && i < 9) {
+		if (b[i] == ' ') {
+			return true;
+		} else {
+			std::cout << "There's already an " << b[i] << " there!" << std::endl;
+			return false;
+		}
+	} else {
+		std::cout << "Enter a number between 0 and 8 (inclusive)" << std::endl;
+		return false;
+	}
+
+}
+
 void userInput(char board[9]) {
 	while (1) {
 		int p1_input;
 		int p2_input;
-		std::cout << "Player 1: Where do you want to place your x on the board?";
-		std::cin >> p1_input;
-		board[p1_input] = 'x';
-		printBoard(board);
-		if (checkForWin(board)) {
-			std::cout << "Congratulations, Player 1 wins!" << std::endl;
-			break;
+		while (!checkForWin(board) && !checkFull(board)) {
+			std::cout << "Player 1: Where do you want to place your x on the board?";
+			std::cin >> p1_input;
+			if (validMove(board, p1_input)) {
+				board[p1_input] = 'x';
+				printBoard(board);
+				if (checkForWin(board)) {
+					std::cout << "Congratulations, Player 1 wins!" << std::endl;
+				}
+				break;
+			}
 		}
-		std::cout << "Player 2: Where do you want to place your o on the board?";
-		std::cin >> p2_input;
-		board[p2_input] = 'o';
-		printBoard(board);
+		while (!checkForWin(board) && !checkFull(board)) {
+			std::cout << "Player 2: Where do you want to place your o on the board?";
+			std::cin >> p2_input;
+			if (validMove(board, p2_input)) {
+				board[p2_input] = 'o';
+				printBoard(board);
+				if (checkForWin(board)) {
+					std::cout << "Congratulations, Player 2 wins!" << std::endl;
+				}
+				break;
+			}
+		}
 		if (checkForWin(board)) {
-			std::cout << "Congratulations, Player 2 wins!" << std::endl;
+			break;
+		} else if (checkFull(board)) {
+			std::cout << "Game Over, the board is full and nobody won." << std::endl;
 			break;
 		}
 	}
@@ -67,34 +105,6 @@ void userInput(char board[9]) {
 
 int main() {
 	char board[9] = { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' };
-
-	/* Unit tests
-	std::string str1 = "x";
-	std::string str2 = "x";
-	std::string str3 = "x";
-	std::cout << str1.compare(str2) << std::endl;
-	std::cout << str1.compare(str3) << std::endl;
-	std::cout << (-88 && 1) << std::endl;
-	if(str1.compare(" ") && str2.compare(" ") && str3.compare(" ") && (str1.compare(str2) == 0) && (str1.compare(str3) == 0)) {
-		std::cout << "success" << std::endl;
-	} else {
-		std::cout << "fail" << std::endl;
-	}
-
-	char c1 = 'x';
-	char c2 = ' ';
-	char c3 = ' ';
-	std::cout << (c1 == c2) << std::endl;
-	std::cout << (c2 == c3) << std::endl;
-	std::cout << (c1 != ' ') << std::endl;
-	std::cout << (c1 == c2 == c3) << std::endl;
-	if (c1 != ' ' && c2 != ' ' && c3 != ' ' && c1 == c2 && c2 == c3) {
-		std::cout << "success" << std::endl;
-	} else {
-		std::cout << "fail" << std::endl;
-	}
-	*/
-
 	printBoard(board);
 	userInput(board);
 }
